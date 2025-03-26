@@ -1,5 +1,6 @@
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/utils/text_styles.dart';
+import 'package:chat_app/presentation/pages/auth_pages/sign_up.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatelessWidget {
@@ -29,25 +30,32 @@ class SignIn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 50.0),
+              const SizedBox(height: 50.0),
               SignInTitle(),
-              SizedBox(height: 40.0),
+              const SizedBox(height: 40.0),
               TextFormField(
                 decoration: InputDecoration(labelText: "Email"),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               TextFormField(
                 decoration: InputDecoration(labelText: "Password"),
                 obscureText: true,
               ),
-              SizedBox(height: 40.0),
+              const SizedBox(height: 40.0),
               ElevatedButton(
                 onPressed: () {},
                 child: Text("Login"),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SignUp(),
+                    ),
+                  );
+                },
                 child: Text("Sign up"),
               ),
             ],

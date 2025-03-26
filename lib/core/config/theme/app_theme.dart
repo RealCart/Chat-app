@@ -10,6 +10,7 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       elevation: 0.0,
       backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
     ),
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: AppColors.green,
