@@ -34,6 +34,12 @@ class AppTheme {
         borderSide: BorderSide(color: AppColors.green),
         borderRadius: BorderRadius.circular(10.0),
       ),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
