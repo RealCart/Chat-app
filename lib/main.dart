@@ -1,5 +1,5 @@
 import 'package:chat_app/core/config/theme/app_theme.dart';
-import 'package:chat_app/presentation/pages/auth_pages/sign_in.dart';
+import 'package:chat_app/core/routes/app_routeR.dart';
 import 'package:chat_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
@@ -11,19 +11,21 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   setupServiceLocator();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final router = AppRouter().router;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.appTheme,
-      home: SignIn(),
+      routerConfig: router,
     );
   }
 }

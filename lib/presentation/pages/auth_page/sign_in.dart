@@ -1,14 +1,14 @@
+import 'package:chat_app/core/routes/app_routes.dart';
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/utils/text_styles.dart';
 import 'package:chat_app/domain/usecases/sign_in_usecase.dart';
 import 'package:chat_app/presentation/bloc/sign_in_bloc/sign_in_bloc.dart';
-import 'package:chat_app/presentation/pages/auth_pages/sign_up.dart';
-import 'package:chat_app/presentation/pages/home_pages/homa_page.dart';
 import 'package:chat_app/presentation/widgets/circular_progress.dart';
 import 'package:chat_app/presentation/widgets/password_field.dart';
 import 'package:chat_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class SignIn extends StatelessWidget {
   SignIn({super.key});
@@ -38,11 +38,7 @@ class SignIn extends StatelessWidget {
         body: BlocListener<SignInBloc, SignInState>(
           listener: (context, state) {
             if (state is SignInSuccessfullyState) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const HomaPage()),
-                ModalRoute.withName("/"),
-              );
+              context.goNamed(AppRoutes.chats.name);
             }
 
             if (state is SignInErrorState) {
@@ -91,12 +87,7 @@ class SignIn extends StatelessWidget {
                   const SizedBox(height: 10.0),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignUp(),
-                        ),
-                      );
+                      context.pushNamed(AppRoutes.signUp.name);
                     },
                     child: Text("Sign up"),
                   ),

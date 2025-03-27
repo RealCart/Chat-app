@@ -1,16 +1,17 @@
 import 'dart:io';
 
+import 'package:chat_app/core/routes/app_routes.dart';
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/utils/media_image.dart';
 import 'package:chat_app/domain/usecases/sign_up_usecase.dart';
 import 'package:chat_app/presentation/bloc/sign_up_bloc/sign_up_bloc.dart';
-import 'package:chat_app/presentation/pages/home_pages/homa_page.dart';
 import 'package:chat_app/presentation/widgets/circular_progress.dart';
 import 'package:chat_app/presentation/widgets/password_field.dart';
 import 'package:chat_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({super.key});
@@ -40,7 +41,7 @@ class _SignUpState extends State<SignUp> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
             icon: Icon(Icons.arrow_back_ios),
           ),
@@ -50,13 +51,7 @@ class _SignUpState extends State<SignUp> {
         body: BlocListener<SignUpBloc, SignUpState>(
           listener: (context, state) {
             if (state is SignUpSuccessfullySatate) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomaPage(),
-                ),
-                ModalRoute.withName('/'),
-              );
+              context.goNamed(AppRoutes.chats.name);
             }
 
             if (state is SignUpErrorSatate) {

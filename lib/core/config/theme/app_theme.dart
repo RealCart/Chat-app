@@ -1,6 +1,7 @@
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/utils/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTheme {
   static final appTheme = ThemeData(
@@ -8,7 +9,10 @@ class AppTheme {
     fontFamily: "Gilroy",
     scaffoldBackgroundColor: AppColors.white,
     appBarTheme: AppBarTheme(
-      elevation: 0.0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: AppColors.white,
+        statusBarIconBrightness: Brightness.dark,
+      ),
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
     ),
