@@ -1,7 +1,6 @@
 part of 'sign_in_bloc.dart';
 
-@immutable
-sealed class SignInEvent {}
+abstract class SignInEvent {}
 
 class AuthSignInEvent extends SignInEvent {
   AuthSignInEvent({

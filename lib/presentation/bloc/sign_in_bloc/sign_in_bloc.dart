@@ -1,7 +1,6 @@
-import 'package:chat_app/domain/entities/user_auth_entity.dart';
+import 'package:chat_app/domain/entities/user_entity.dart';
 import 'package:chat_app/domain/usecases/sign_in_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';

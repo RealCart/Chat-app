@@ -38,7 +38,7 @@ class SignIn extends StatelessWidget {
         body: BlocListener<SignInBloc, SignInState>(
           listener: (context, state) {
             if (state is SignInSuccessfullyState) {
-              context.goNamed(AppRoutes.chats.name);
+              context.goNamed(AppRoutes.userList.name);
             }
 
             if (state is SignInErrorState) {

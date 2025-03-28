@@ -9,7 +9,7 @@ class SignUpLoadingSatate extends SignUpState {}
 class SignUpSuccessfullySatate extends SignUpState {
   SignUpSuccessfullySatate(this.user);
 
-  final UserAuthEntity user;
+  final UserEntity user;
 }
 
 class SignUpErrorSatate extends SignUpState {

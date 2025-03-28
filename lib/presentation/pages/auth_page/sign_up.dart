@@ -51,7 +51,7 @@ class _SignUpState extends State<SignUp> {
         body: BlocListener<SignUpBloc, SignUpState>(
           listener: (context, state) {
             if (state is SignUpSuccessfullySatate) {
-              context.goNamed(AppRoutes.chats.name);
+              context.goNamed(AppRoutes.userList.name);
             }
 
             if (state is SignUpErrorSatate) {

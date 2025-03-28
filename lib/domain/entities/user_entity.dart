@@ -1,13 +1,15 @@
-class UserAuthEntity {
-  UserAuthEntity({
+import 'dart:io';
+
+class UserEntity {
+  UserEntity({
     required this.uid,
     required this.imageUrl,
     required this.username,
-    required this.email,
+    this.email,
   });
 
   final String uid;
   final String? imageUrl;
-  final String? username;
-  final String email;
+  final String username;
+  final String? email;
 }

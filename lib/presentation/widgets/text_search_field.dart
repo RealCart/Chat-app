@@ -9,7 +9,7 @@ class TextSearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: getTextStyle(CustomTextStyle.s16w500),
+      style: getTextStyle(CustomTextStyle.s16w500, color: AppColors.gray),
       cursorColor: AppColors.black,
       decoration: InputDecoration(
         filled: true,

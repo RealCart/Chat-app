@@ -1,5 +1,7 @@
 import 'package:chat_app/core/routes/app_routes.dart';
+import 'package:chat_app/presentation/pages/chat_page/chat_page.dart';
 import 'package:chat_app/presentation/pages/error_page/error_page.dart';
+import 'package:chat_app/presentation/pages/user_list_page/user_list_page.dart';
 import 'package:chat_app/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 
 import 'package:chat_app/presentation/pages/auth_page/sign_in.dart';
 import 'package:chat_app/presentation/pages/auth_page/sign_up.dart';
-import 'package:chat_app/presentation/pages/chats_page/chats_page.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -33,24 +34,38 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: AppRoutes.chats.route,
-        name: AppRoutes.chats.name,
+        path: AppRoutes.userList.route,
+        name: AppRoutes.userList.name,
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
-          child: const ChatsPage(),
+          child: const UserListPage(),
           transitionsBuilder: _buildSlideTransition,
         ),
       ),
+      GoRoute(
+        path: AppRoutes.chatPage.route,
+        name: AppRoutes.chatPage.name,
+        pageBuilder: (context, state) {
+          final uid = state.pathParameters['uid']!;
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: ChatPage(
+              otherUserUid: uid,
+            ),
+            transitionsBuilder: _buildSlideTransition,
+          );
+        },
+      )
     ],
     redirect: (context, state) {
       final userAuthenticated = sl<fbAuth.FirebaseAuth>().currentUser != null;
-      print(
-          ">>>>>>>>>>>>>>>>>>>>>>>>>>> USER AUTHENTICATED: $userAuthenticated");
+      final isOnAuthPage = state.fullPath == AppRoutes.signIn.route ||
+          state.fullPath == AppRoutes.signUp.route;
 
       if (!userAuthenticated) {
         return AppRoutes.signIn.route;
-      } else if (userAuthenticated) {
-        return AppRoutes.chats.route;
+      } else if (userAuthenticated && isOnAuthPage) {
+        return AppRoutes.userList.route;
       }
       return null;
     },

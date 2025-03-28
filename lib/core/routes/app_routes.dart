@@ -1,7 +1,8 @@
 enum AppRoutes {
   signIn('/signIn'),
   signUp('/signUp'),
-  chats('/chats');
+  userList('/userList'),
+  chatPage('/chatPage/:uid');
 
   const AppRoutes(this.route);
 

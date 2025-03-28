@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app/domain/core/value_objects.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:chat_app/domain/entities/user_auth_entity.dart';
+import 'package:chat_app/domain/entities/user_entity.dart';
 import 'package:chat_app/domain/usecases/sign_up_usecase.dart';
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
