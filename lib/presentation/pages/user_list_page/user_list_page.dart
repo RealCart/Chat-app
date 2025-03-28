@@ -114,6 +114,12 @@ class UserListPage extends StatelessWidget {
                             uid: state.users[index].uid,
                             imageUrl: state.users[index].imageUrl,
                             username: state.users[index].username,
+                            onTap: () => context.pushNamed(
+                              AppRoutes.chatPage.name,
+                              pathParameters: {
+                                'uid': state.users[index].uid,
+                              },
+                            ),
                           );
                         },
                         separatorBuilder: (context, index) {

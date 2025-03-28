@@ -143,7 +143,7 @@ class ChatPage extends StatelessWidget {
             return SafeArea(
               child: Scaffold(
                 appBar: PreferredSize(
-                  preferredSize: const Size.fromHeight(65.0),
+                  preferredSize: const Size.fromHeight(70.0),
                   child: Container(
                     decoration: const BoxDecoration(),
                     child: Row(
@@ -231,30 +231,72 @@ class ChatPage extends StatelessWidget {
   }
 
   Widget _buildMessageInput(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              hintText: "Введите сообщение",
-              contentPadding: EdgeInsets.all(8),
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20.0,
+        right: 20.0,
+        top: 14.0,
+        bottom: 23.0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          InkWell(
+            onTap: () {},
+            borderRadius: BorderRadius.circular(12.0),
+            child: Container(
+              width: 42.0,
+              height: 42.0,
+              decoration: BoxDecoration(
+                color: AppColors.stroke,
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: SvgPicture.asset(
+                "assets/icons/folder_clip.svg",
+                fit: BoxFit.scaleDown,
+              ),
             ),
           ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.send),
-          onPressed: () {
-            final text = _controller.text.trim();
-            if (text.isNotEmpty) {
-              context.read<ChatBloc>().add(
-                    SendMessageEvent(text, otherUserUid),
-                  );
-              _controller.clear();
-            }
-          },
-        )
-      ],
+          SizedBox(width: 8.0),
+          Expanded(
+            child: TextFormField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                hintText: "Сообщение",
+                contentPadding: EdgeInsets.all(8),
+                fillColor: AppColors.stroke,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.send),
+            onPressed: () {
+              final text = _controller.text.trim();
+              if (text.isNotEmpty) {
+                context.read<ChatBloc>().add(
+                      SendMessageEvent(text, otherUserUid),
+                    );
+                _controller.clear();
+              }
+            },
+          )
+        ],
+      ),
     );
   }
 }
