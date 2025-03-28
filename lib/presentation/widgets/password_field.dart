@@ -21,6 +21,12 @@ class _PasswordFieldState extends State<PasswordField> {
   bool _isObscure = true;
 
   @override
+  void dispose() {
+    widget.passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.passwordController,

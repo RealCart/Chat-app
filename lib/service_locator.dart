@@ -18,6 +18,7 @@ import 'package:chat_app/domain/usecases/sign_up_usecase.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:cloud_firestore/cloud_firestore.dart' as fbStore;
+import 'package:firebase_database/firebase_database.dart' as fbRealBase;
 
 import 'package:get_it/get_it.dart';
 
@@ -29,6 +30,8 @@ void setupServiceLocator() {
       () => fbAuth.FirebaseAuth.instance);
   sl.registerLazySingleton<fbStore.FirebaseFirestore>(
       () => fbStore.FirebaseFirestore.instance);
+  sl.registerLazySingleton<fbRealBase.FirebaseDatabase>(
+      () => fbRealBase.FirebaseDatabase.instance);
 
   // firebase remote data;
   sl.registerLazySingleton<FirebaseAuthRemote>(

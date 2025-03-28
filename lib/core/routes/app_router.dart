@@ -1,4 +1,5 @@
 import 'package:chat_app/core/routes/app_routes.dart';
+import 'package:chat_app/core/utils/user_database_status.dart';
 import 'package:chat_app/presentation/pages/chat_page/chat_page.dart';
 import 'package:chat_app/presentation/pages/error_page/error_page.dart';
 import 'package:chat_app/presentation/pages/user_list_page/user_list_page.dart';
@@ -49,6 +50,8 @@ class AppRouter {
           final uid = state.pathParameters['uid']!;
           return CustomTransitionPage(
             key: state.pageKey,
+            transitionDuration: Duration(milliseconds: 150),
+            reverseTransitionDuration: Duration(milliseconds: 150),
             child: ChatPage(
               otherUserUid: uid,
             ),
@@ -62,9 +65,10 @@ class AppRouter {
       final isOnAuthPage = state.fullPath == AppRoutes.signIn.route ||
           state.fullPath == AppRoutes.signUp.route;
 
-      if (!userAuthenticated) {
+      if (!userAuthenticated && !isOnAuthPage) {
         return AppRoutes.signIn.route;
       } else if (userAuthenticated && isOnAuthPage) {
+        setupPresence();
         return AppRoutes.userList.route;
       }
       return null;

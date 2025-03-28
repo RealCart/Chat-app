@@ -34,6 +34,14 @@ class _SignUpState extends State<SignUp> {
   File? pickedImage;
 
   @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SignUpBloc(sl<SignUpUsecase>()),

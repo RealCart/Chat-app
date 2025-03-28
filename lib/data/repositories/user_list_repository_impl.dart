@@ -1,4 +1,3 @@
-import 'package:chat_app/core/utils/image_utils.dart';
 import 'package:chat_app/data/sources/remote/firebase_firestore_remote.dart';
 import 'package:chat_app/domain/entities/user_entity.dart';
 import 'package:chat_app/domain/repositories/user_list_repository.dart';
@@ -6,7 +5,6 @@ import 'package:chat_app/service_locator.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
-import 'package:flutter/material.dart';
 
 class UserListRepositoryImpl implements UserListRepository {
   final FirebaseFirestoreRemote firebaseFirestoreRemote;
@@ -20,7 +18,6 @@ class UserListRepositoryImpl implements UserListRepository {
     try {
       final usersData = await firebaseFirestoreRemote
           .getAllUsersDataExcept(sl<fbAuth.FirebaseAuth>().currentUser!.uid);
-      print(">>>>>>>>>>>>>>>>>>>> ALL USERS: ${usersData}");
       return Right(
         usersData.map((map) {
           return UserEntity(

@@ -7,8 +7,12 @@ class ChatInitial extends ChatState {}
 class ChatLoading extends ChatState {}
 
 class ChatLoaded extends ChatState {
+  final UserEntity user;
   final List<MessageEntity> messages;
-  ChatLoaded(this.messages);
+  ChatLoaded({
+    required this.messages,
+    required this.user,
+  });
 }
 
 class ChatError extends ChatState {

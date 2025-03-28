@@ -89,8 +89,8 @@ class UserListPage extends StatelessWidget {
                                   ? null
                                   : SvgPicture.asset(
                                       "assets/icons/user.svg",
-                                      width: 35.0,
-                                      height: 35.0,
+                                      width: 30.0,
+                                      height: 30.0,
                                     ),
                             ),
                           ),

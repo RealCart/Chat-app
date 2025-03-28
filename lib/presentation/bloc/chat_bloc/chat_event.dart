@@ -8,8 +8,12 @@ class LoadChatEvent extends ChatEvent {
 }
 
 class MessagesUpdatedEvent extends ChatEvent {
+  final String uid;
   final List<MessageEntity> messages;
-  MessagesUpdatedEvent(this.messages);
+  MessagesUpdatedEvent({
+    required this.messages,
+    required this.uid,
+  });
 }
 
 class SendMessageEvent extends ChatEvent {

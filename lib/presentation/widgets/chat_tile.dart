@@ -36,7 +36,7 @@ class ChatTile extends StatelessWidget {
           spacing: 12.0,
           children: [
             CircleAvatar(
-              radius: MediaQuery.of(context).size.width * 0.05,
+              radius: MediaQuery.of(context).size.width * 0.075,
               backgroundColor: AppColors.green,
               backgroundImage: imageUrl != null
                   ? MemoryImage(ImageUtils.base64ToImageBytes(imageUrl!))
