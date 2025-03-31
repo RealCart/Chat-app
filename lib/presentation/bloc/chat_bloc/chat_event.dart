@@ -17,7 +17,9 @@ class MessagesUpdatedEvent extends ChatEvent {
 }
 
 class SendMessageEvent extends ChatEvent {
-  final String content;
+  final String? content;
   final String otherUid;
-  SendMessageEvent(this.content, this.otherUid);
+  final String? imageBase64;
+
+  SendMessageEvent(this.otherUid, {this.content, this.imageBase64});
 }

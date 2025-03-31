@@ -4,11 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TextSearchField extends StatelessWidget {
-  const TextSearchField({super.key});
+  const TextSearchField({
+    super.key,
+    required this.onChanged,
+  });
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: onChanged,
       autofocus: false,
       style: getTextStyle(CustomTextStyle.s16w500, color: AppColors.gray),
       cursorColor: AppColors.black,
@@ -42,7 +47,7 @@ class TextSearchField extends StatelessWidget {
             height: 20,
           ),
         ),
-        labelText: "Поиск",
+        hintText: "Поиск",
       ),
     );
   }

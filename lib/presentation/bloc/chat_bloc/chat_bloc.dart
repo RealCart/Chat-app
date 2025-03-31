@@ -17,7 +17,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final SendMessageUsecase sendMessageUsecase;
   final GetMessagesUsecase getMessagesUsecase;
   final GetUserByIdUsecase getUserByIdUsecase;
-  StreamSubscription? _subscription;
 
   ChatBloc({
     required this.sendMessageUsecase,
@@ -25,7 +24,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     required this.getUserByIdUsecase,
   }) : super(ChatInitial()) {
     on<LoadChatEvent>(_onLoadChat);
-    on<MessagesUpdatedEvent>(_onMessagesUpdated);
     on<SendMessageEvent>(_onSendMessage);
   }
 
@@ -33,35 +31,26 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(ChatLoading());
     try {
       final currentUser = sl<fbAuth.FirebaseAuth>().currentUser!;
-      _subscription?.cancel();
-      _subscription = getMessagesUsecase(
-          params: GetMessagesParams(
-        myUid: currentUser.uid,
-        userId: event.otherUid,
-      )).listen((messages) {
-        add(MessagesUpdatedEvent(
-          uid: event.otherUid,
-          messages: messages,
-        ));
-      }, onError: (err) {
-        emit(ChatError(err.toString()));
-      });
+      final messagesStream = getMessagesUsecase(
+        params: GetMessagesParams(
+          myUid: currentUser.uid,
+          userId: event.otherUid,
+        ),
+      );
+      await for (final messages in messagesStream) {
+        final userResult = await getUserByIdUsecase(params: event.otherUid);
+        userResult.fold(
+          (failure) {
+            emit(ChatError(failure.toString()));
+          },
+          (user) {
+            emit(ChatLoaded(user: user, messages: messages));
+          },
+        );
+      }
     } catch (e) {
       emit(ChatError(e.toString()));
     }
-  }
-
-  void _onMessagesUpdated(
-      MessagesUpdatedEvent event, Emitter<ChatState> emit) async {
-    final user = await getUserByIdUsecase(params: event.uid);
-    user.fold((e) {
-      emit(ChatError(e.toString()));
-    }, (user) {
-      emit(ChatLoaded(
-        user: user,
-        messages: event.messages,
-      ));
-    });
   }
 
   Future<void> _onSendMessage(
@@ -72,6 +61,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       senderId: currentUser.uid,
       receiverId: event.otherUid,
       content: event.content,
+      image: event.imageBase64,
       timestamp: DateTime.now(),
     );
     await sendMessageUsecase(params: msg);
@@ -79,7 +69,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   @override
   Future<void> close() {
-    _subscription?.cancel();
     return super.close();
   }
 }

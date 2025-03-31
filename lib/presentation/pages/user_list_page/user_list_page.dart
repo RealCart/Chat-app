@@ -1,23 +1,40 @@
 import 'package:chat_app/core/routes/app_routes.dart';
 import 'package:chat_app/core/utils/colors.dart';
-import 'package:chat_app/core/utils/image_utils.dart';
 import 'package:chat_app/core/utils/text_styles.dart';
+import 'package:chat_app/domain/entities/user_entity.dart';
 import 'package:chat_app/domain/usecases/get_all_users_usecase.dart';
 import 'package:chat_app/domain/usecases/get_current_user_usecase.dart';
 import 'package:chat_app/presentation/bloc/user_list_bloc/user_list_bloc.dart';
 import 'package:chat_app/presentation/widgets/chat_tile.dart';
 import 'package:chat_app/presentation/widgets/circular_progress.dart';
 import 'package:chat_app/presentation/widgets/text_search_field.dart';
+import 'package:chat_app/presentation/widgets/user_avatar.dart';
 import 'package:chat_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:go_router/go_router.dart';
 
-class UserListPage extends StatelessWidget {
+class UserListPage extends StatefulWidget {
   const UserListPage({super.key});
+
+  @override
+  State<UserListPage> createState() => _UserListPageState();
+}
+
+class _UserListPageState extends State<UserListPage> {
+  List<UserEntity>? _filteredUsers;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +63,19 @@ class UserListPage extends StatelessWidget {
             }
 
             if (state is UserListLoaded) {
+              _filteredUsers ??= state.users;
+
+              void searchUsers(String query) {
+                final suggestions = state.users.where((user) {
+                  final name = user.username.toLowerCase();
+                  final input = query.toLowerCase();
+                  return name.contains(input);
+                }).toList();
+                setState(() {
+                  _filteredUsers = suggestions;
+                });
+              }
+
               return Scaffold(
                 body: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -74,24 +104,8 @@ class UserListPage extends StatelessWidget {
                               sl<fbAuth.FirebaseAuth>().signOut();
                               context.goNamed(AppRoutes.signIn.name);
                             },
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.07,
-                              backgroundColor: AppColors.green,
-                              backgroundImage:
-                                  state.currentUser.imageUrl != null
-                                      ? MemoryImage(
-                                          ImageUtils.base64ToImageBytes(
-                                            state.currentUser.imageUrl!,
-                                          ),
-                                        )
-                                      : null,
-                              child: state.currentUser.imageUrl != null
-                                  ? null
-                                  : SvgPicture.asset(
-                                      "assets/icons/user.svg",
-                                      width: 30.0,
-                                      height: 30.0,
-                                    ),
+                            child: UserAvatar(
+                              imageUrl: state.currentUser.imageUrl,
                             ),
                           ),
                         ),
@@ -100,7 +114,9 @@ class UserListPage extends StatelessWidget {
                     const SizedBox(height: 6.0),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: TextSearchField(),
+                      child: TextSearchField(
+                        onChanged: (text) => searchUsers(text),
+                      ),
                     ),
                     const SizedBox(height: 24.0),
                     Divider(
@@ -111,13 +127,13 @@ class UserListPage extends StatelessWidget {
                       child: ListView.separated(
                         itemBuilder: (context, index) {
                           return ChatTile(
-                            uid: state.users[index].uid,
-                            imageUrl: state.users[index].imageUrl,
-                            username: state.users[index].username,
+                            uid: _filteredUsers![index].uid,
+                            imageUrl: _filteredUsers![index].imageUrl,
+                            username: _filteredUsers![index].username,
                             onTap: () => context.pushNamed(
                               AppRoutes.chatPage.name,
                               pathParameters: {
-                                'uid': state.users[index].uid,
+                                'uid': _filteredUsers![index].uid,
                               },
                             ),
                           );
@@ -130,7 +146,7 @@ class UserListPage extends StatelessWidget {
                             endIndent: 20.0,
                           );
                         },
-                        itemCount: state.users.length,
+                        itemCount: _filteredUsers!.length,
                       ),
                     )
                   ],

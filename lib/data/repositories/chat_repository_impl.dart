@@ -17,6 +17,7 @@ class ChatRepositoryImpl implements ChatRepository {
       'senderId': message.senderId,
       'receiverId': message.receiverId,
       'content': message.content,
+      'image': message.image,
       'timestamp': message.timestamp.millisecondsSinceEpoch,
     };
 
@@ -26,14 +27,17 @@ class ChatRepositoryImpl implements ChatRepository {
   @override
   Stream<List<MessageEntity>> getMessages(String myUid, String otherUid) {
     final chatId = _makeChatId(myUid, otherUid);
-    return firestoreDataSource.getMessagesStream(chatId).map((snapshot) {
+    final response = firestoreDataSource.getMessagesStream(chatId);
+    print(">>>>>>>>>>>>>> RESPONSE: ${response}");
+    return response.map((snapshot) {
       return snapshot.docs.map((doc) {
         final map = doc.data();
         return MessageEntity(
           id: doc.id,
           senderId: map['senderId'] as String,
           receiverId: map['receiverId'] as String,
-          content: map['content'] as String,
+          content: map['content'] as String?,
+          image: map['image'] as String?,
           timestamp:
               DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int),
         );

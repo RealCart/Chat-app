@@ -1,0 +1,2 @@
+C:/Users/Beka/Desktop/chat_app/android/app/.cxx/Debug/3u416d38/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/Beka/Desktop/chat_app/android/app/.cxx/Debug/3u416d38/arm64-v8a/CMakeFiles/rebuild_cache.dir

@@ -2,6 +2,7 @@ import 'package:chat_app/data/repositories/chat_repository_impl.dart';
 import 'package:chat_app/data/repositories/sign_in_REPOSITORY_impl.dart';
 import 'package:chat_app/data/repositories/sign_up_repository_impl.dart';
 import 'package:chat_app/data/repositories/user_list_repository_impl.dart';
+import 'package:chat_app/data/sources/local/local_data_source.dart';
 import 'package:chat_app/data/sources/remote/firebase_auth_remote.dart';
 import 'package:chat_app/data/sources/remote/firebase_firestore_remote.dart';
 import 'package:chat_app/domain/repositories/chat_repository.dart';
@@ -24,7 +25,7 @@ import 'package:get_it/get_it.dart';
 
 final sl = GetIt.I;
 
-void setupServiceLocator() {
+Future<void> setupServiceLocator() async {
   // firebase instance;
   sl.registerLazySingleton<fbAuth.FirebaseAuth>(
       () => fbAuth.FirebaseAuth.instance);
@@ -32,6 +33,12 @@ void setupServiceLocator() {
       () => fbStore.FirebaseFirestore.instance);
   sl.registerLazySingleton<fbRealBase.FirebaseDatabase>(
       () => fbRealBase.FirebaseDatabase.instance);
+
+  // local databse
+  final database = await LocalDataSourceImpl.setupDependencies();
+
+  sl.registerLazySingleton<LocalDataSource>(
+      () => LocalDataSourceImpl(database));
 
   // firebase remote data;
   sl.registerLazySingleton<FirebaseAuthRemote>(
@@ -58,7 +65,8 @@ void setupServiceLocator() {
 
   sl.registerLazySingleton<UserListRepository>(
     () => UserListRepositoryImpl(
-        firebaseFirestoreRemote: sl<FirebaseFirestoreRemote>()),
+        firebaseFirestoreRemote: sl<FirebaseFirestoreRemote>(),
+        userCacheLocalDataSource: sl<LocalDataSource>()),
   );
 
   // usecases

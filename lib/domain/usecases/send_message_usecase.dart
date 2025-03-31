@@ -8,7 +8,7 @@ class SendMessageUsecase implements Usecase<void, MessageEntity> {
   final ChatRepository repository;
 
   @override
-  Future<void> call({required params}) {
-    return repository.sendMessage(params);
+  Future<void> call({required params}) async {
+    return await repository.sendMessage(params);
   }
 }
