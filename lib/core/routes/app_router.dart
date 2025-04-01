@@ -58,7 +58,7 @@ class AppRouter {
             transitionsBuilder: _buildSlideTransition,
           );
         },
-      )
+      ),
     ],
     redirect: (context, state) {
       final userAuthenticated = sl<fbAuth.FirebaseAuth>().currentUser != null;

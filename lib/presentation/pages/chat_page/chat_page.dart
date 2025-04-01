@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/utils/image_utils.dart';
@@ -18,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
@@ -38,6 +38,18 @@ class _ChatPageState extends State<ChatPage> {
   final ScrollController _scrollController = ScrollController();
 
   bool _showScrollDownButton = false;
+
+  final Map<String, Uint8List> _imageCache = {};
+
+  Uint8List _getCachedImage(String base64String) {
+    if (_imageCache.containsKey(base64String)) {
+      return _imageCache[base64String]!;
+    } else {
+      final bytes = ImageUtils.base64ToImageBytes(base64String);
+      _imageCache[base64String] = bytes;
+      return bytes;
+    }
+  }
 
   @override
   void initState() {
@@ -132,7 +144,7 @@ class _ChatPageState extends State<ChatPage> {
                             ),
                             child: Image(
                               image: MemoryImage(
-                                ImageUtils.base64ToImageBytes(msg.image!),
+                                _getCachedImage(msg.image!),
                               ),
                             ),
                           ),
@@ -276,41 +288,44 @@ class _ChatPageState extends State<ChatPage> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () => context.pop(),
-                              child: Container(
-                                width: 30.0,
-                                padding: const EdgeInsets.only(right: 12.0),
-                                child: SvgPicture.asset(
-                                  "assets/icons/arrow_back.svg",
-                                  width: 20.0,
-                                  height: 20.0,
-                                ),
-                              ),
-                            ),
-                            UserAvatar(imageUrl: state.user.imageUrl),
-                            const SizedBox(width: 12.0),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  state.user.username,
-                                  style: getTextStyle(CustomTextStyle.s15w600),
-                                ),
-                                Text(
-                                  "В сети",
-                                  style: getTextStyle(
-                                    CustomTextStyle.s12w500,
-                                    color: AppColors.dartGray,
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.5),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => context.pop(),
+                                child: Container(
+                                  width: 30.0,
+                                  padding: const EdgeInsets.only(right: 12.0),
+                                  child: SvgPicture.asset(
+                                    "assets/icons/arrow_back.svg",
+                                    width: 20.0,
+                                    height: 20.0,
                                   ),
                                 ),
-                              ],
-                            )
-                          ],
+                              ),
+                              UserAvatar(imageUrl: state.user.imageUrl),
+                              const SizedBox(width: 12.0),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    state.user.username,
+                                    style:
+                                        getTextStyle(CustomTextStyle.s15w600),
+                                  ),
+                                  Text(
+                                    "В сети",
+                                    style: getTextStyle(
+                                      CustomTextStyle.s12w500,
+                                      color: AppColors.dartGray,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                         const Divider(
                           height: 1.0,

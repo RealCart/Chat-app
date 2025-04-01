@@ -10,8 +10,8 @@ import 'package:chat_app/presentation/widgets/password_field.dart';
 import 'package:chat_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({super.key});
@@ -63,10 +63,11 @@ class _SignUpState extends State<SignUp> {
             }
 
             if (state is SignUpErrorSatate) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorMessage),
-                ),
+              toastification.show(
+                context: context,
+                title: Text(state.errorMessage),
+                autoCloseDuration: Duration(seconds: 3),
+                type: ToastificationType.error,
               );
             }
 
@@ -93,16 +94,23 @@ class _SignUpState extends State<SignUp> {
                         setState(() => pickedImage = file);
                       }
                     },
+                    onDoubleTap: () {
+                      if (pickedImage != null) {
+                        setState(() {
+                          pickedImage = null;
+                        });
+                      }
+                    },
                     child: CircleAvatar(
                       radius: MediaQuery.of(context).size.width * 0.20,
                       backgroundColor: AppColors.green,
                       backgroundImage:
                           pickedImage != null ? FileImage(pickedImage!) : null,
                       child: pickedImage == null
-                          ? SvgPicture.asset(
-                              "assets/icons/user.svg",
-                              width: 80.0,
-                              height: 80.0,
+                          ? Icon(
+                              Icons.camera_alt_outlined,
+                              color: AppColors.white,
+                              size: 80.0,
                             )
                           : null,
                     ),

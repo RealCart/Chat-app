@@ -10,10 +10,10 @@ import 'package:chat_app/presentation/widgets/circular_progress.dart';
 import 'package:chat_app/presentation/widgets/text_search_field.dart';
 import 'package:chat_app/presentation/widgets/user_avatar.dart';
 import 'package:chat_app/service_locator.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:go_router/go_router.dart';
 
 class UserListPage extends StatefulWidget {
@@ -100,8 +100,8 @@ class _UserListPageState extends State<UserListPage> {
                             vertical: 10.0,
                           ),
                           child: GestureDetector(
-                            onTap: () {
-                              sl<fbAuth.FirebaseAuth>().signOut();
+                            onTap: () async {
+                              await sl<fbAuth.FirebaseAuth>().signOut();
                               context.goNamed(AppRoutes.signIn.name);
                             },
                             child: UserAvatar(
